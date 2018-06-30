@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const userSchema = mongoose.Schema({
     email: {
@@ -22,6 +23,15 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     }
+});
+// mongosse run just befor saving a recorde to mongo
+userSchema.pre("save", function(next){
+   let user = this;
+   bcrypt.hash(user.password, 10, function(err, hash){
+      if(err) return next(err);
+      user.password = hash;
+      next();
+   });
 });
 
 // export model 

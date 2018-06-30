@@ -53,11 +53,12 @@ router.post("/register", function(req, res, next){
         return res.redirect("/profile");
       });
       
+    }else{
+      const err = new Error("All feilds required!");
+      err.status = 400;
+      return next(err);
     }
   
-    const err = new Error("All feilds required!");
-    err.status = 400;
-    return next(err);
 });
 
 module.exports = router;
