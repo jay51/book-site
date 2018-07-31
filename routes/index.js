@@ -2,6 +2,32 @@ const express = require("express");
 const router = express.Router();
 const  User = require("../models/user");
 
+// GET /login
+router.get("/login", function(req, res, next) {
+  return res.render("login", {title: "Log In"});
+});
+
+// POST /login
+router.post("/login", function(req, res, next) {
+    if(req.body.email && req.body.password){
+      User.authenticate(req.body.email, req.body.password, function (error, user){
+        // if any error returned or no user returned
+        if(error || !user){
+          const err = new Error("Wrong email or password !");
+          err.status = 401;
+          return next(err);
+        }
+        req.session.userId = user._id;
+        return res.redirect("/profile");
+      });
+      
+    }else{
+      const err = new Error("Email and password are required");
+      err.status = 401;
+      return next(err);
+    }
+});
+
 
 // GET /
 router.get("/", function(req, res, next) {
@@ -50,6 +76,7 @@ router.post("/register", function(req, res, next){
       User.create(userDate, function(err, user){
         // handle error
         if (err) return next(err);
+        req.session.userId = user._id;
         return res.redirect("/profile");
       });
       

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
+const session = require("express-session");
 
 // mongodb conection
 mongoose.connect("mongodb://localhost/book-site");
@@ -16,6 +17,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // serve static files from /public
 app.use(express.static(__dirname + "/public"));
+
+// SESSION midalware
+app.use(session({
+  secret: "the only required argument",
+  resave: true, // force the session to be saved in the session store
+  saveUninitialized: false // (to save or not to save) an uninitialized/new session in the store
+}));
+
 
 // view engine setup
 app.set("view engine", "pug");
