@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.statics.authenticate = function(email, password, callback){
     // User is definde in the other file (this)
-    this.findOne({email: email})
+    User.findOne({email: email})
         .exec( function(err, user){
             if (err) return callback(err);
             if(!user) {
