@@ -28,6 +28,21 @@ router.post("/login", function(req, res, next) {
     }
 });
 
+// GET /profile
+router.get("/profile", function(req, res, next) {
+  // check for session id, if no session then user is not loged in
+  if(!req.session.userId){
+    const err = new Error("you're not autherized t view this page");
+    err.status = 403;
+    return next(err);
+  }
+  // if loged in find and display user's data
+  User.findById(req.session.userId).exec(function(err, user){
+      if(err) return next(err);
+      
+      return res.render("profile", {title: "profile", name: user.name, favorite: user.favoriteBook});
+    });
+});
 
 // GET /
 router.get("/", function(req, res, next) {
