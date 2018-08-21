@@ -25,6 +25,11 @@ app.use(session({
   saveUninitialized: false // (to save or not to save) an uninitialized/new session in the store
 }));
 
+// make user ID available in templates
+app.use(function(req, res, next) {
+   res.locals.currentUser = req.session.userId;
+   next();
+});
 
 // view engine setup
 app.set("view engine", "pug");

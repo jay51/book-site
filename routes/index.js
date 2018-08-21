@@ -28,6 +28,18 @@ router.post("/login", function(req, res, next) {
     }
 });
 
+// GET /logout
+router.get("/logout", function(req, res, next){
+  if(req.session){
+    // delete session
+    req.session.destroy(function(err){
+      if(err) return next(err);
+      return res.redirect("/");
+    });
+  } else{ return res.redirect("/");}
+});
+
+
 // GET /profile
 router.get("/profile", function(req, res, next) {
   // check for session id, if no session then user is not loged in
