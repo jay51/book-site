@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const  User = require("../models/user");
+const mid = require("../middleware");
 
 // GET /login
-router.get("/login", function(req, res, next) {
+router.get("/login", mid.loggedOut, function(req, res, next) {
   return res.render("login", {title: "Log In"});
 });
 
@@ -41,13 +42,7 @@ router.get("/logout", function(req, res, next){
 
 
 // GET /profile
-router.get("/profile", function(req, res, next) {
-  // check for session id, if no session then user is not loged in
-  if(!req.session.userId){
-    const err = new Error("you're not autherized t view this page");
-    err.status = 403;
-    return next(err);
-  }
+router.get("/profile", mid.requiresLogin,function(req, res, next) {
   // if loged in find and display user's data
   User.findById(req.session.userId).exec(function(err, user){
       if(err) return next(err);
@@ -72,7 +67,7 @@ router.get("/contact", function(req, res, next) {
 });
 
 // GET /register
-router.get("/register", function(req, res, next) {
+router.get("/register", mid.loggedOut, function(req, res, next) {
    return res.render("register", {title: "sign up"});
 });
 
