@@ -1,8 +1,6 @@
 
 function loggedOut(req, res, next){
     if(req.session && req.session.userId) return res.redirect("/profile");
-    
-    return next();
 }
 
 //   check for session id, if no session then user is not loged in

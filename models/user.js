@@ -27,8 +27,6 @@ const userSchema = mongoose.Schema({
 
 // authenticate input against database documents
 // the static object let you add methods to the schemaModle
-
-
 userSchema.statics.authenticate = function(email, password, callback){
     // User is definde in the other file (this)
     this.findOne({email: email})

@@ -19,6 +19,7 @@ router.post("/login", function(req, res, next) {
           return next(err);
         }
         req.session.userId = user._id;
+        console.log(req.session);
         return res.redirect("/profile");
       });
       
@@ -47,6 +48,7 @@ router.get("/profile", mid.requiresLogin,function(req, res, next) {
   User.findById(req.session.userId).exec(function(err, user){
       if(err) return next(err);
       
+      console.log(req.session);     
       return res.render("profile", {title: "profile", name: user.name, favorite: user.favoriteBook});
     });
 });
